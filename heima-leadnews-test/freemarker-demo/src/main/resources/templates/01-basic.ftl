@@ -11,6 +11,14 @@ Hello ${name} <br>
 <b>对象Student中的数据展示：</b><br/>
 姓名：${stu.name}<br/>
 年龄：${stu.age}
+<#list stus as stu>
+    <tr>
+        <td>${stu_index+1}</td>
+        <td>${stu.name}</td>
+        <td>${stu.age}</td>
+        <td>${stu.money}</td>
+    </tr>
+</#list>
 <hr>
 </body>
 </html>

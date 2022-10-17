@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="freemarker-demo" />
+        <module name="heima-file-starter" />
         <module name="minio-demo" />
         <module name="heima-leadnews-utils" />
         <module name="heima-leadnews-feign-api" />
@@ -16,7 +17,6 @@
         <module name="heima-leadnews-article" />
         <module name="heima-leadnews-common" />
         <module name="heima-leadnews-model" />
-        <module name="heima-leadnews-gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -26,13 +26,14 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="freemarker-demo" options="-parameters" />
+      <module name="heima-file-starter" options="-parameters" />
       <module name="heima-leadnews" options="" />
       <module name="heima-leadnews-apis" options="-parameters" />
       <module name="heima-leadnews-app-gateway" options="-parameters" />
       <module name="heima-leadnews-article" options="-parameters" />
       <module name="heima-leadnews-common" options="-parameters" />
       <module name="heima-leadnews-feign-api" options="-parameters" />
-      <module name="heima-leadnews-gateway" options="-parameters" />
+      <module name="heima-leadnews-gateway" options="" />
       <module name="heima-leadnews-model" options="-parameters" />
       <module name="heima-leadnews-service" options="" />
       <module name="heima-leadnews-test" options="" />

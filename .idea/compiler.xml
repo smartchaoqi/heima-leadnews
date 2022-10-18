@@ -35,9 +35,9 @@
       <module name="heima-leadnews-article" options="-parameters" />
       <module name="heima-leadnews-common" options="-parameters" />
       <module name="heima-leadnews-feign-api" options="-parameters" />
-      <module name="heima-leadnews-gateway" options="-parameters" />
+      <module name="heima-leadnews-gateway" options="" />
       <module name="heima-leadnews-model" options="-parameters" />
-      <module name="heima-leadnews-service" options="" />
+      <module name="heima-leadnews-service" options="-parameters" />
       <module name="heima-leadnews-test" options="" />
       <module name="heima-leadnews-user" options="-parameters" />
       <module name="heima-leadnews-utils" options="-parameters" />

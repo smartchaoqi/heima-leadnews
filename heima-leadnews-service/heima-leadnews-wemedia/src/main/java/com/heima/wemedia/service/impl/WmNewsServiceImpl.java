@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
+import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.model.wemedia.pojos.WmNews;
 import com.heima.model.wemedia.pojos.WmUser;
@@ -61,5 +62,17 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
         responseResult.setData(page.getRecords());
 
         return responseResult;
+    }
+
+    @Override
+    public ResponseResult submitNews(WmNewsDto wmNewsDto) {
+        //保存修改文章
+
+        //判断是否为草稿
+
+        //不是草稿,保存文章内容图片与素材关系
+
+        //不是草稿,保存文章封面图片与素材关系
+        return null;
     }
 }

@@ -17,6 +17,7 @@ public enum AppHttpCodeEnum {
     // 参数错误 500~1000
     PARAM_REQUIRE(500,"缺少参数"),
     PARAM_INVALID(501,"无效参数"),
+    FILE_DELETE_FAIL(501,"文件删除失败"),
     PARAM_IMAGE_FORMAT_ERROR(502,"图片格式有误"),
     SERVER_ERROR(503,"服务器内部错误"),
     // 数据错误 1000~2000
@@ -27,7 +28,8 @@ public enum AppHttpCodeEnum {
     NO_OPERATOR_AUTH(3000,"无权限操作"),
     NEED_ADMIND(3001,"需要管理员权限"),
     //自媒体文章错误3501~3600
-    MATERIASL_REFERENCE_FAIL(3501,"素材引用失效");
+    MATERIASL_REFERENCE_FAIL(3501,"素材引用失效"),
+    MATERIASL_HAS_REFERENCE(3502,"素材还有引用,不能删除");
 
     int code;
     String errorMessage;

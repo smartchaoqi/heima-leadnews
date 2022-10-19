@@ -22,4 +22,25 @@ public interface WmMaterialService extends IService<WmMaterial> {
      * @return
      */
     public ResponseResult findList(WmMaterialDto dto);
+
+    /**
+     * 素材删除
+     * @param id
+     * @return
+     */
+    ResponseResult delPicture(Long id);
+
+    /**
+     * 取消收藏
+     * @param id
+     * @return
+     */
+    ResponseResult cancelCollect(Long id);
+
+    /**
+     * 收藏
+     * @param id
+     * @return
+     */
+    ResponseResult collect(Long id);
 }

@@ -3,14 +3,17 @@ package com.heima.wemedia.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.heima.common.constants.WemediaConstants;
 import com.heima.file.service.FileStorageService;
 import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import com.heima.model.wemedia.dtos.WmMaterialDto;
 import com.heima.model.wemedia.pojos.WmMaterial;
+import com.heima.model.wemedia.pojos.WmNewsMaterial;
 import com.heima.utils.thread.WmThreadLocalUtil;
 import com.heima.wemedia.mapper.WmMaterialMapper;
+import com.heima.wemedia.mapper.WmNewsMaterialMapper;
 import com.heima.wemedia.service.WmMaterialService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +80,55 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         PageResponseResult pageResponseResult = new PageResponseResult(dto.getPage(),dto.getSize(),(int)page.getTotal());
         pageResponseResult.setData(page.getRecords());
         return pageResponseResult;
+    }
+
+    @Autowired
+    private WmNewsMaterialMapper wmNewsMaterialMapper;
+
+    @Override
+    public ResponseResult delPicture(Long id) {
+        if (id==null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+        WmMaterial wmMaterial = getById(id);
+        if (wmMaterial==null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
+        }
+        //查询是否有文章引用
+        Integer count = wmNewsMaterialMapper.selectCount(new LambdaQueryWrapper<WmNewsMaterial>().eq(WmNewsMaterial::getMaterialId, id));
+        if (count>0){
+            return ResponseResult.errorResult(AppHttpCodeEnum.MATERIASL_HAS_REFERENCE);
+        }
+        removeById(id);
+        try {
+            fileStorageService.delete(wmMaterial.getUrl());
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseResult.errorResult(AppHttpCodeEnum.FILE_DELETE_FAIL);
+        }
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    @Override
+    public ResponseResult cancelCollect(Long id) {
+        WmMaterial wmMaterial = getById(id);
+        if (wmMaterial!=null) {
+            setWmMaterialCollect(wmMaterial, WemediaConstants.CANCEL_COLLECT_MATERIAL);
+        }
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    @Override
+    public ResponseResult collect(Long id) {
+        WmMaterial wmMaterial = getById(id);
+        if (wmMaterial!=null) {
+            setWmMaterialCollect(wmMaterial, WemediaConstants.COLLECT_MATERIAL);
+        }
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    private void setWmMaterialCollect(WmMaterial wmMaterial, Short isCollection) {
+        wmMaterial.setIsCollection(isCollection);
+        updateById(wmMaterial);
     }
 }

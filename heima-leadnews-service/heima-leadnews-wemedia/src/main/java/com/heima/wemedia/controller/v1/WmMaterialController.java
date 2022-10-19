@@ -4,10 +4,7 @@ import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.wemedia.dtos.WmMaterialDto;
 import com.heima.wemedia.service.WmMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -25,5 +22,20 @@ public class WmMaterialController {
     @PostMapping("/list")
     public ResponseResult findList(@RequestBody WmMaterialDto dto){
         return wmMaterialService.findList(dto);
+    }
+
+    @GetMapping("/del_picture/{id}")
+    public ResponseResult delPicture(@PathVariable Long id){
+        return wmMaterialService.delPicture(id);
+    }
+
+    @GetMapping("/cancel_collect/{id}")
+    public ResponseResult cancelCollect(@PathVariable Long id){
+        return wmMaterialService.cancelCollect(id);
+    }
+
+    @GetMapping("/collect/{id}")
+    public ResponseResult collect(@PathVariable Long id){
+        return wmMaterialService.collect(id);
     }
 }

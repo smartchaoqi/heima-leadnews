@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.apis.article.IArticleClient;
 import com.heima.common.aliyun.GreenImageScan;
 import com.heima.common.aliyun.GreenTextScan;
+import com.heima.common.tess4j.Tess4jClient;
 import com.heima.file.service.FileStorageService;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.common.dtos.ResponseResult;
@@ -30,6 +31,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -54,11 +58,11 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             Map<String,Object> textAndImages = handleTextAndImages(wmNews);
 
             //自管理的敏感词过滤
-            boolean isSensitive = handleSensitiveScan((String) textAndImages.get("context"),wmNews);
+            boolean isSensitive = handleSensitiveScan((String) textAndImages.get("content"),wmNews);
             if (!isSensitive) return;
 
             //2.审核文章内容
-            boolean isTextScan = handleTextScan((String) textAndImages.get("context"),wmNews);
+            boolean isTextScan = handleTextScan((String) textAndImages.get("content"),wmNews);
             if (!isTextScan) return;
             //3.审核图片
             boolean isImageScan = handleImageScan((List<String>) textAndImages.get("images"),wmNews);
@@ -139,6 +143,9 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private Tess4jClient tess4jClient;
+
     /**
      * 审核图片
      * @param images
@@ -151,10 +158,26 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             return true;
         }
         images=images.stream().distinct().collect(Collectors.toList());
-//        for (String image : images) {
-//            byte[] bytes = fileStorageService.downLoadFile(image);
-//        }
-        List<byte[]> collect = images.stream().map(k -> fileStorageService.downLoadFile(k)).collect(Collectors.toList());
+        List<byte[]> collect=new ArrayList<>();
+
+        try{
+            for (String image : images) {
+                byte[] bytes = fileStorageService.downLoadFile(image);
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+                BufferedImage read = ImageIO.read(byteArrayInputStream);
+                String result = tess4jClient.doOCR(read);
+                //过滤文字
+                boolean isSensitive = handleSensitiveScan(result, wmNews);
+                if (!isSensitive){
+                    return false;
+                }
+
+                collect.add(bytes);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         try {
             Map map = greenImageScan.imageScan(collect);
             if (map!=null){

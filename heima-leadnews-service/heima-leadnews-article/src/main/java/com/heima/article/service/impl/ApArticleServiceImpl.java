@@ -6,6 +6,7 @@ import com.heima.article.mapper.ApArticleConfigMapper;
 import com.heima.article.mapper.ApArticleContentMapper;
 import com.heima.article.mapper.ApArticleMapper;
 import com.heima.article.service.ApArticleService;
+import com.heima.article.service.ArticleFreemarkerService;
 import com.heima.common.constants.ArticleConstants;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.article.dtos.ArticleHomeDto;
@@ -85,6 +86,11 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
             apArticleContent.setContent(articleDto.getContent());
             apArticleContentMapper.updateById(apArticleContent);
         }
+        //生成静态文件到minio中
+        articleFreemarkerService.buildArticleToMinIO(apArticle,articleDto.getContent());
         return ResponseResult.okResult(apArticle.getId());
     }
+
+    @Autowired
+    private ArticleFreemarkerService articleFreemarkerService;
 }

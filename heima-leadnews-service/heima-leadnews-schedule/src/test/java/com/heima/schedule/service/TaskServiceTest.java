@@ -10,8 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
-
 @SpringBootTest(classes = ScheduleApplication.class)
 @RunWith(SpringRunner.class)
 public class TaskServiceTest {
@@ -33,6 +31,11 @@ public class TaskServiceTest {
     @Test
     public void cancelTask(){
         taskService.cancelTask(1583719232531623937L);
+    }
+
+    @Test
+    public void testPoll(){
+        System.out.println(taskService.poll(100, 50));
     }
 
 }

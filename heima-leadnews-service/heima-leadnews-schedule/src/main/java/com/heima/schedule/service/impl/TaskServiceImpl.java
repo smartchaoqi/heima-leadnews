@@ -10,6 +10,7 @@ import com.heima.schedule.mapper.TaskinfoLogsMapper;
 import com.heima.schedule.mapper.TaskinfoMapper;
 import com.heima.schedule.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,24 @@ public class TaskServiceImpl implements TaskService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Task poll(int type, int priority) {
+        try{
+            String key=type+"_"+priority;
+            String task_json = cacheService.lRightPop(ScheduleConstants.TOPIC + key);
+            if (StringUtils.isNotBlank(task_json)){
+                Task task = JSON.parseObject(task_json, Task.class);
+                //修改数据库信息
+                updateDb(task.getTaskId(),ScheduleConstants.EXECUTED);
+                return task;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("poll task exception");
+        }
+        return null;
     }
 
     /**

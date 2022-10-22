@@ -30,4 +30,9 @@ public class TaskServiceTest {
         System.out.println(taskId);
     }
 
+    @Test
+    public void cancelTask(){
+        taskService.cancelTask(1583719232531623937L);
+    }
+
 }

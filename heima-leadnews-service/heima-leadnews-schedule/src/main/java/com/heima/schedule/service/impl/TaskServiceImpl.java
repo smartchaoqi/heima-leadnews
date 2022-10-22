@@ -33,12 +33,64 @@ public class TaskServiceImpl implements TaskService {
         //1.添加任务到数据库中
         boolean success = addTaskToDb(task);
 
-
         if (success){
             //2.添加任务到redis中
             addTaskToCache(task);
         }
         return task.getTaskId();
+    }
+
+    @Override
+    public boolean cancelTask(long taskId) {
+        //删除任务,更新任务日志
+        Task task = updateDb(taskId,ScheduleConstants.CANCELLED);
+        //删除redis数据
+        if (task!=null){
+            removeTaskFromCache(task);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 删除redis数据
+     * @param task
+     */
+    private void removeTaskFromCache(Task task) {
+        String key=task.getTaskType()+"_"+task.getPriority();
+
+        if (task.getExecuteTime()<=System.currentTimeMillis()){
+            cacheService.lRemove(ScheduleConstants.TOPIC+key,0,JSON.toJSONString(task));
+        }else{
+            cacheService.zRemove(ScheduleConstants.FUTURE+key,JSON.toJSONString(task));
+        }
+
+    }
+
+    /**
+     * 删除任务，更新任务日志
+     * @param taskId
+     * @param status
+     * @return
+     */
+    private Task updateDb(long taskId, int status) {
+        try{
+            //删除任务
+            taskinfoMapper.deleteById(taskId);
+            //更新任务日志
+            TaskinfoLogs taskinfoLogs = taskinfoLogsMapper.selectById(taskId);
+            taskinfoLogs.setStatus(status);
+            taskinfoLogsMapper.updateById(taskinfoLogs);
+
+            Task task = new Task();
+            BeanUtils.copyProperties(taskinfoLogs,task);
+            task.setExecuteTime(taskinfoLogs.getExecuteTime().getTime());
+            return task;
+        }catch (Exception e){
+            log.error("task cancel exception taskId={}",taskId);
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

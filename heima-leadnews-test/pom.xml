@@ -17,6 +17,7 @@
         <module>kafka-demo</module>
         <module>es-init</module>
         <module>tess4j-demo</module>
+        <module>mongo-demo</module>
     </modules>
 
     <properties>

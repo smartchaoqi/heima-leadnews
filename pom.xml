@@ -20,6 +20,7 @@
         <module>heima-leadnews-basic</module>
         <module>heima-leadnews-test/tess4j-demo</module>
         <module>heima-leadnews-test/kafka-demo</module>
+        <module>heima-leadnews-gateway/heima-leadnews-admin-gateway</module>
     </modules>
 
     <!-- 继承Spring boot工程 -->

@@ -114,11 +114,23 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
 
     @Override
     public ResponseResult del(Long id) {
-        int count = wmNewsService.count(new LambdaQueryWrapper<WmNews>().eq(WmNews::getChannelId, id));
-        if (count>0){
+        if (checkChannelReference(id)){
             return ResponseResult.errorResult(AppHttpCodeEnum.CHANNEL_HAS_REFERENCE);
         }
         removeById(id);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    @Override
+    public ResponseResult update(WmChannel wmChannel) {
+        if (!wmChannel.getStatus()&&checkChannelReference(Long.valueOf(wmChannel.getId()))){
+            return ResponseResult.errorResult(AppHttpCodeEnum.CHANNEL_HAS_REFERENCE);
+        }
+        updateById(wmChannel);
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    private boolean checkChannelReference(Long channelId){
+        return wmNewsService.count(new LambdaQueryWrapper<WmNews>().eq(WmNews::getChannelId, channelId))>0;
     }
 }

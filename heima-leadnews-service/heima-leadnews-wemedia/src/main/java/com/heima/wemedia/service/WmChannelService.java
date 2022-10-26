@@ -27,4 +27,6 @@ public interface WmChannelService extends IService<WmChannel> {
     ResponseResult channelList(WmChannelDto dto);
 
     ResponseResult del(Long id);
+
+    ResponseResult update(WmChannel wmChannel);
 }

@@ -51,4 +51,9 @@ public class WmChannelController {
     public ResponseResult del(@PathVariable Long id){
         return wmChannelService.del(id);
     }
+
+    @PostMapping("/update")
+    public ResponseResult update(@RequestBody WmChannel wmChannel){
+        return wmChannelService.update(wmChannel);
+    }
 }

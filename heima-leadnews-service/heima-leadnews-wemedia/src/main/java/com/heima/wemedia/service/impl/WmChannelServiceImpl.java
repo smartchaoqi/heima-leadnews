@@ -83,4 +83,14 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
         wmNewsService.updateById(wmNews);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
+
+    @Override
+    public ResponseResult saveChannel(WmChannel adChannel) {
+        int count = count(new LambdaQueryWrapper<WmChannel>().eq(WmChannel::getName, adChannel.getName()));
+        if (count>0){
+            return ResponseResult.errorResult(AppHttpCodeEnum.CHANNEL_IS_REPEAT);
+        }
+        save(adChannel);
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableDiscoveryClient
 @MapperScan("com.heima.admin.mapper")
+//@EnableFeignClients(basePackages = "com.heima.apis")
 public class AdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(AdminApplication.class,args);

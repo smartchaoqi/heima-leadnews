@@ -20,6 +20,7 @@ public enum AppHttpCodeEnum {
     NEWS_ID_NOT_EXISTS(501,"文章id不可缺少"),
     FILE_DELETE_FAIL(501,"文件删除失败"),
     NEWS_IS_RELEASE(501,"文章已发布"),
+    CHANNEL_IS_REPEAT(501,"文章已发布"),
     NEWS_IS_NOT_RELEASE(501,"文章不是发布状态,无法上下架"),
     PARAM_IMAGE_FORMAT_ERROR(502,"图片格式有误"),
     SERVER_ERROR(503,"服务器内部错误"),

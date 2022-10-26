@@ -20,4 +20,6 @@ public interface WmChannelService extends IService<WmChannel> {
     ResponseResult delNews(Long id);
 
     ResponseResult newsDownUp(WmNewsDownUpDto dto);
+
+    ResponseResult saveChannel(WmChannel adChannel);
 }

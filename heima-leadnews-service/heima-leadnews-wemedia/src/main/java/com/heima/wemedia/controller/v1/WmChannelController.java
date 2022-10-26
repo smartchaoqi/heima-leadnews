@@ -1,6 +1,7 @@
 package com.heima.wemedia.controller.v1;
 
 import com.heima.model.common.dtos.ResponseResult;
+import com.heima.model.wemedia.dtos.WmChannelDto;
 import com.heima.model.wemedia.dtos.WmNewsDownUpDto;
 import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.pojos.WmChannel;
@@ -38,5 +39,10 @@ public class WmChannelController {
     @PostMapping("/save")
     public ResponseResult save(@RequestBody WmChannel adChannel){
         return wmChannelService.saveChannel(adChannel);
+    }
+
+    @PostMapping("/list")
+    public ResponseResult list(@RequestBody WmChannelDto dto){
+        return wmChannelService.channelList(dto);
     }
 }

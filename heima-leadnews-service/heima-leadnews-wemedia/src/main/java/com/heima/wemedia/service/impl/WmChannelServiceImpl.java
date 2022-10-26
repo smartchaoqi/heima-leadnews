@@ -1,9 +1,12 @@
 package com.heima.wemedia.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
+import com.heima.model.wemedia.dtos.WmChannelDto;
 import com.heima.model.wemedia.dtos.WmNewsDownUpDto;
 import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.pojos.WmChannel;
@@ -14,6 +17,7 @@ import com.heima.wemedia.mapper.WmNewsMaterialMapper;
 import com.heima.wemedia.service.WmChannelService;
 import com.heima.wemedia.service.WmNewsService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,5 +96,19 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
         }
         save(adChannel);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    @Override
+    public ResponseResult channelList(WmChannelDto dto) {
+        dto.checkParam();
+        Page<WmChannel> page = new Page<>(dto.getPage(),dto.getSize());
+        LambdaQueryWrapper<WmChannel> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(StringUtils.isNotBlank(dto.getName()),WmChannel::getName,dto.getName());
+        wrapper.orderByAsc(WmChannel::getCreatedTime);
+        page(page,wrapper);
+
+        PageResponseResult pageResponseResult = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
+        pageResponseResult.setData(page.getRecords());
+        return ResponseResult.okResult(pageResponseResult);
     }
 }

@@ -17,6 +17,7 @@ public enum AppHttpCodeEnum {
     // 参数错误 500~1000
     PARAM_REQUIRE(500,"缺少参数"),
     PARAM_INVALID(501,"无效参数"),
+    CHANNEL_HAS_REFERENCE(501,"频道有文章引用"),
     NEWS_ID_NOT_EXISTS(501,"文章id不可缺少"),
     FILE_DELETE_FAIL(501,"文件删除失败"),
     NEWS_IS_RELEASE(501,"文章已发布"),

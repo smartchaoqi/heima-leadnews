@@ -111,4 +111,14 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
         pageResponseResult.setData(page.getRecords());
         return ResponseResult.okResult(pageResponseResult);
     }
+
+    @Override
+    public ResponseResult del(Long id) {
+        int count = wmNewsService.count(new LambdaQueryWrapper<WmNews>().eq(WmNews::getChannelId, id));
+        if (count>0){
+            return ResponseResult.errorResult(AppHttpCodeEnum.CHANNEL_HAS_REFERENCE);
+        }
+        removeById(id);
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
 }

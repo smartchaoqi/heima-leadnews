@@ -6,6 +6,7 @@ import com.heima.model.wemedia.dtos.WmNewsDownUpDto;
 import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.pojos.WmChannel;
 import com.heima.wemedia.service.WmChannelService;
+import org.simpleframework.xml.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,5 +45,10 @@ public class WmChannelController {
     @PostMapping("/list")
     public ResponseResult list(@RequestBody WmChannelDto dto){
         return wmChannelService.channelList(dto);
+    }
+
+    @GetMapping("/del/{id}")
+    public ResponseResult del(@PathVariable Long id){
+        return wmChannelService.del(id);
     }
 }

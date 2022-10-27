@@ -12,6 +12,7 @@ import com.heima.common.exception.CustomException;
 import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
+import com.heima.model.wemedia.dtos.WmNewsAuthDto;
 import com.heima.model.wemedia.dtos.WmNewsDownUpDto;
 import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
@@ -22,10 +23,7 @@ import com.heima.model.wemedia.pojos.WmUser;
 import com.heima.utils.thread.WmThreadLocalUtil;
 import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.mapper.WmNewsMaterialMapper;
-import com.heima.wemedia.service.WmMaterialService;
-import com.heima.wemedia.service.WmNewsAutoScanService;
-import com.heima.wemedia.service.WmNewsService;
-import com.heima.wemedia.service.WmNewsTaskService;
+import com.heima.wemedia.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -154,8 +152,32 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 
+    @Override
+    public ResponseResult listVo(WmNewsAuthDto dto) {
+        LambdaQueryWrapper<WmNews> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(dto.getStatus()!=null,WmNews::getStatus,dto.getStatus());
+        wrapper.like(StringUtils.isNotBlank(dto.getTitle()),WmNews::getTitle,dto.getTitle());
+        wrapper.orderByDesc(WmNews::getCreatedTime);
+
+        Page<WmNews> page = new Page<>(dto.getPage(), dto.getSize());
+        page(page,wrapper);
+        for (WmNews record : page.getRecords()) {
+            WmUser wmUser = wmUserService.getById(record.getUserId());
+            if (wmUser!=null) {
+                record.setAuthorName(wmUser.getName());
+            }
+        }
+
+        PageResponseResult result = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
+        result.setData(page.getRecords());
+        return result;
+    }
+
     @Autowired
     private WmNewsTaskService wmNewsTaskService;
+
+    @Autowired
+    private WmUserService wmUserService;
 
     private void saveRelativeInfoForCover(WmNewsDto dto, WmNews wmNews, List<String> materials) {
 

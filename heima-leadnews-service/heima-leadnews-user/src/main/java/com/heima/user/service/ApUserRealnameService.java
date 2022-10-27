@@ -7,4 +7,6 @@ import com.heima.model.user.pojos.ApUserRealname;
 
 public interface ApUserRealnameService extends IService<ApUserRealname> {
     ResponseResult list(AuthDto authDto);
+
+    ResponseResult authFail(AuthDto authDto);
 }

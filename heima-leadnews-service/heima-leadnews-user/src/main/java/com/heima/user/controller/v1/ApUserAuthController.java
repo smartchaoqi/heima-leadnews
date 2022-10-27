@@ -20,4 +20,9 @@ public class ApUserAuthController {
         return apUserRealnameService.list(authDto);
     }
 
+    @PostMapping("/authFail")
+    public ResponseResult authFail(@RequestBody AuthDto authDto){
+        return apUserRealnameService.authFail(authDto);
+    }
+
 }

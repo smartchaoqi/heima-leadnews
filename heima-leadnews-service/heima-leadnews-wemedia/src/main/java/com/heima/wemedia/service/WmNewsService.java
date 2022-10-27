@@ -33,4 +33,6 @@ public interface WmNewsService extends IService<WmNews> {
     public ResponseResult downOrUp(WmNewsDownUpDto dto);
 
     ResponseResult listVo(WmNewsAuthDto dto);
+
+    ResponseResult oneVo(Long id);
 }

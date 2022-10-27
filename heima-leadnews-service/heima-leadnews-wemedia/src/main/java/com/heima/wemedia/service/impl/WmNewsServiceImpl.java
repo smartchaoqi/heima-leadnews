@@ -162,15 +162,29 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         Page<WmNews> page = new Page<>(dto.getPage(), dto.getSize());
         page(page,wrapper);
         for (WmNews record : page.getRecords()) {
-            WmUser wmUser = wmUserService.getById(record.getUserId());
-            if (wmUser!=null) {
-                record.setAuthorName(wmUser.getName());
-            }
+            buildAuthorName(record);
         }
 
         PageResponseResult result = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
         result.setData(page.getRecords());
         return result;
+    }
+
+    @Override
+    public ResponseResult oneVo(Long id) {
+        WmNews wmNews = getById(id);
+        if (wmNews==null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+        buildAuthorName(wmNews);
+        return ResponseResult.okResult(wmNews);
+    }
+
+    private void buildAuthorName(WmNews wmNews){
+        WmUser wmUser = wmUserService.getById(wmNews.getUserId());
+        if (wmUser!=null) {
+            wmNews.setAuthorName(wmUser.getName());
+        }
     }
 
     @Autowired

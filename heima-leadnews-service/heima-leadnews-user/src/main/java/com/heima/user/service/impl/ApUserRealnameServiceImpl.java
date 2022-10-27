@@ -48,4 +48,20 @@ public class ApUserRealnameServiceImpl extends ServiceImpl<ApUserRealnameMapper,
         updateById(apUserRealname);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
+
+    @Override
+    public ResponseResult authPass(AuthDto authDto) {
+        if (authDto.getId()==null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+        ApUserRealname apUserRealname = getById(authDto.getId());
+        if (apUserRealname==null || !Objects.equals(apUserRealname.getStatus(), AuthConstants.WAIT_AUTH)){
+            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
+        }
+        apUserRealname.setStatus(AuthConstants.AUTH_SUCCESS);
+        apUserRealname.setUpdatedTime(new Date());
+        updateById(apUserRealname);
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
 }

@@ -9,4 +9,6 @@ public interface ApUserRealnameService extends IService<ApUserRealname> {
     ResponseResult list(AuthDto authDto);
 
     ResponseResult authFail(AuthDto authDto);
+
+    ResponseResult authPass(AuthDto authDto);
 }

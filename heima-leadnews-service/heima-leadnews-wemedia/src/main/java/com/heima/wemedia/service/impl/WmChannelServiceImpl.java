@@ -109,7 +109,8 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
 
         PageResponseResult pageResponseResult = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
         pageResponseResult.setData(page.getRecords());
-        return ResponseResult.okResult(pageResponseResult);
+
+        return pageResponseResult;
     }
 
     @Override

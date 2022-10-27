@@ -25,4 +25,9 @@ public class ApUserAuthController {
         return apUserRealnameService.authFail(authDto);
     }
 
+    @PostMapping("/authPass")
+    public ResponseResult authPass(@RequestBody AuthDto authDto){
+        return apUserRealnameService.authPass(authDto);
+    }
+
 }

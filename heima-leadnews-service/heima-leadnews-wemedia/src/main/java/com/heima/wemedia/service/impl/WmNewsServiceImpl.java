@@ -180,6 +180,32 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         return ResponseResult.okResult(wmNews);
     }
 
+    @Override
+    public ResponseResult authFail(WmNewsAuthDto dto) {
+        WmNews wmNews = getById(dto.getId());
+        if (wmNews==null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+        authNews(wmNews,WmNews.Status.FAIL.getCode(), dto.getMsg());
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    @Override
+    public ResponseResult authPass(WmNewsAuthDto dto) {
+        WmNews wmNews = getById(dto.getId());
+        if (wmNews==null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+        authNews(wmNews,WmNews.Status.SUCCESS.getCode(), dto.getMsg());
+        return null;
+    }
+
+    private void authNews(WmNews wmNews,Short status,String msg){
+        wmNews.setStatus(status);
+        wmNews.setReason(msg);
+        updateById(wmNews);
+    }
+
     private void buildAuthorName(WmNews wmNews){
         WmUser wmUser = wmUserService.getById(wmNews.getUserId());
         if (wmUser!=null) {

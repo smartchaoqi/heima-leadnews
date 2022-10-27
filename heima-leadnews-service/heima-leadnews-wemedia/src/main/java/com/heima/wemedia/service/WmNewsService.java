@@ -35,4 +35,8 @@ public interface WmNewsService extends IService<WmNews> {
     ResponseResult listVo(WmNewsAuthDto dto);
 
     ResponseResult oneVo(Long id);
+
+    ResponseResult authFail(WmNewsAuthDto dto);
+
+    ResponseResult authPass(WmNewsAuthDto dto);
 }

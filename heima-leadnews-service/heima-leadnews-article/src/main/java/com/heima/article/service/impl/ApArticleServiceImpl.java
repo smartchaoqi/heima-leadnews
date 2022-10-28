@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.article.mapper.ApArticleConfigMapper;
 import com.heima.article.mapper.ApArticleContentMapper;
 import com.heima.article.mapper.ApArticleMapper;
+import com.heima.article.service.ApArticleConfigService;
 import com.heima.article.service.ApArticleService;
 import com.heima.article.service.ArticleFreemarkerService;
 import com.heima.common.constants.ArticleConstants;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.article.dtos.ArticleHomeDto;
+import com.heima.model.article.dtos.ArticleInfoDto;
 import com.heima.model.article.pojos.ApArticle;
 import com.heima.model.article.pojos.ApArticleConfig;
 import com.heima.model.article.pojos.ApArticleContent;
@@ -91,6 +93,22 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         return ResponseResult.okResult(apArticle.getId());
     }
 
+    @Override
+    public ResponseResult loadArticleBehavior(ArticleInfoDto dto) {
+        LambdaQueryWrapper<ApArticleConfig> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ApArticleConfig::getArticleId,dto.getArticleId());
+        ApArticleConfig one = apArticleConfigService.getOne(wrapper);
+        if (one!=null){
+            one.setId(null);
+            one.setArticleId(null);
+            return ResponseResult.okResult(one);
+        }
+        return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
+    }
+
     @Autowired
     private ArticleFreemarkerService articleFreemarkerService;
+
+    @Autowired
+    private ApArticleConfigService apArticleConfigService;
 }

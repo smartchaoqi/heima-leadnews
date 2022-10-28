@@ -7,4 +7,10 @@ public class ArticleConstants {
 
     public static final String ARTICLE_ES_SYNC_TOPIC="article.es.sync.topic";
 
+    //收藏
+    public static final Short COLLECTION=0;
+
+    //取消收藏
+    public static final Short CANCEL_COLLECTION=1;
+
 }

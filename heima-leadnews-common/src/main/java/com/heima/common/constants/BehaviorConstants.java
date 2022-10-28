@@ -42,4 +42,7 @@ public class BehaviorConstants {
     public static String buildLikesKey(Long articleId,Short operation,Short type){
         return articleId.toString()+"_"+operation.toString()+"_"+type.toString();
     }
+
+    public static final Short UN_LIKE=0;
+    public static final Short CANCEL_UN_LIKE=1;
 }

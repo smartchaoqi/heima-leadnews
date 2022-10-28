@@ -1,7 +1,7 @@
 package com.heima.behavior.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.heima.behavior.service.ApLikesBehaviorService;
+import com.heima.behavior.service.LikesBehaviorService;
 import com.heima.common.constants.BehaviorConstants;
 import com.heima.common.redis.CacheService;
 import com.heima.model.bahavior.dtos.LikesBehaviorDto;
@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 @Transactional
 @Service
-public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
+public class LikesBehaviorServiceImpl implements LikesBehaviorService {
     @Autowired
     private CacheService cacheService;
 
